@@ -4,7 +4,7 @@ const path = require('path');
 const origDirPath = path.join(__dirname, 'styles');
 const destDirPath = path.join(__dirname, 'project-dist');
 
-const cssBundle = async (stylesOrigDirPath, stylesDestDirPath) => {
+const cssBundle = async (stylesOrigDirPath, stylesDestDirPath, styleFileName) => {
   const stylesDirFiles = await fs.promises.readdir(
     stylesOrigDirPath, 
     { withFileTypes: true }, 
@@ -13,7 +13,7 @@ const cssBundle = async (stylesOrigDirPath, stylesDestDirPath) => {
     });
 
   if (stylesDirFiles.length > 0) {
-    const writeStream = fs.createWriteStream(path.join(stylesDestDirPath, 'bundle.css'));
+    const writeStream = fs.createWriteStream(path.join(stylesDestDirPath, styleFileName));
     for await (const entry of stylesDirFiles) {
       if (entry.isFile() && entry.name.match(/\.css$/)) {
         const readStream = fs.createReadStream(path.join(stylesOrigDirPath, entry.name));
@@ -27,6 +27,6 @@ const cssBundle = async (stylesOrigDirPath, stylesDestDirPath) => {
   }
 };
 
-cssBundle(origDirPath, destDirPath);
+cssBundle(origDirPath, destDirPath, 'bundle.css');
 
 
