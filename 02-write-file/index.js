@@ -20,7 +20,12 @@ stdin.on('data', data => {
     sayBye();
     process.exit();
   }
-  writeStream.write(data, err => {
-    if (err) throw err;
-  });
+  try {
+    writeStream.write(data, err => {
+      if (err) throw err;
+    });
+  } catch (err) {
+    console.error('Error writing chunk to file');
+    console.error(err);
+  }
 });
